@@ -25,23 +25,7 @@ Event OnWorkshopObjectMoved(ObjectReference akReference)
 EndEvent
 
 Event OnWorkshopObjectDestroyed(ObjectReference akReference)
-<<<<<<< HEAD
-	SnapPoint SP
-	
-	int i
-	While(i < SnapPoints.Length)
-		SP = SnapPoints[i]
-		
-		SP.Marker.Delete()
-		If(SP.Object != None)
-			Unsnap(SP)
-		EndIf
-
-		i += 1
-	EndWhile
-=======
 	RemoveMarkers()
->>>>>>> refs/remotes/cadpnq/master
 EndEvent
 
 Function PlaceMarkers()
@@ -141,8 +125,6 @@ EndFunction
 Function Unsnap(SnapPoint SP)
 	SendOnUnsnappedEvent(Self, SP.Object, SP.Name)
 	(SP.Object as ISP_Script).HandleUnsnap(SP.Object, Self, SP.Target)
-<<<<<<< HEAD
-=======
 	SP.Object = None
 EndFunction
 
@@ -163,7 +145,6 @@ EndFunction
 Function Unregister(ObjectReference ref)
 	ref.UnregisterForCustomEvent(Self, "OnSnapped")
 	ref.UnregisterForCustomEvent(Self, "OnUnsnapped")
->>>>>>> refs/remotes/cadpnq/master
 EndFunction
 
 Function SendOnSnappedEvent(ObjectReference objA, ObjectReference objB, String NodeName)
