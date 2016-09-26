@@ -9,10 +9,10 @@ CustomEvent OnUnsnapped
 
 Struct SnapPoint
 	String Name
-	ObjectReference Marker Hidden
-	ObjectReference Object Hidden
 	String Target
 	String Type
+	ObjectReference Marker Hidden
+	ObjectReference Object Hidden
 EndStruct
 
 Event OnWorkshopObjectPlaced(ObjectReference akReference)
@@ -25,6 +25,7 @@ Event OnWorkshopObjectMoved(ObjectReference akReference)
 EndEvent
 
 Event OnWorkshopObjectDestroyed(ObjectReference akReference)
+<<<<<<< HEAD
 	SnapPoint SP
 	
 	int i
@@ -38,6 +39,9 @@ Event OnWorkshopObjectDestroyed(ObjectReference akReference)
 
 		i += 1
 	EndWhile
+=======
+	RemoveMarkers()
+>>>>>>> refs/remotes/cadpnq/master
 EndEvent
 
 Function PlaceMarkers()
@@ -56,6 +60,23 @@ Function PlaceMarkers()
 			SP.Target = SP.Name
 		EndIf
 		
+		i += 1
+	EndWhile
+EndFunction
+
+Function RemoveMarkers()
+	SnapPoint SP
+	
+	int i
+	While(i < SnapPoints.Length)
+		SP = SnapPoints[i]
+		
+		SP.Marker.Delete()
+		SP.Marker = None
+		If(SP.Object != None)
+			Unsnap(SP)
+		EndIf
+
 		i += 1
 	EndWhile
 EndFunction
@@ -106,6 +127,8 @@ EndFunction
 bool Function IsValidMarker(SnapPoint SP, ISP_MarkerScript Marker)
 	If(Marker.GetLinkedRef(None) == Self)
 		Return False
+	ElseIf(Marker.GetLinkedRef(None).IsEnabled() == False)
+		Return False
 	ElseIf(SP.Type != "" && SP.Type == Marker.Type)
 		Return True
 	ElseIF(Marker.Name == SP.Target)
@@ -118,6 +141,29 @@ EndFunction
 Function Unsnap(SnapPoint SP)
 	SendOnUnsnappedEvent(Self, SP.Object, SP.Name)
 	(SP.Object as ISP_Script).HandleUnsnap(SP.Object, Self, SP.Target)
+<<<<<<< HEAD
+=======
+	SP.Object = None
+EndFunction
+
+ObjectReference Function GetObject(string Name)
+	int index = SnapPoints.FindStruct("Name", Name)
+	If(index == -1)
+		Return None
+	Else
+		Return SnapPoints[index].Object
+	EndIf
+EndFunction
+
+Function Register(ObjectReference ref)
+	ref.RegisterForCustomEvent(Self, "OnSnapped")
+	ref.RegisterForCustomEvent(Self, "OnUnsnapped")
+EndFunction
+
+Function Unregister(ObjectReference ref)
+	ref.UnregisterForCustomEvent(Self, "OnSnapped")
+	ref.UnregisterForCustomEvent(Self, "OnUnsnapped")
+>>>>>>> refs/remotes/cadpnq/master
 EndFunction
 
 Function SendOnSnappedEvent(ObjectReference objA, ObjectReference objB, String NodeName)
